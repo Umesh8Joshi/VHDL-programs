@@ -1,0 +1,35 @@
+--Reading Vectors from a Text file
+library IEEE,BOOK_LIB
+use IEEE.STD_LOGIC_1164.all;
+use STD.TEXTIO.all;
+use BOOK_LIB.UTILS_PKG.all;
+architecture TEST of BOTTOM is
+	file VECTORS:TEXT open READ_MODE is "abc.vec";
+	component EUT
+		port(EN1: in BIT_VECTOR(0 to 3); EN2: in INTEGER; EPX: in STD_LOGIC_VECTOR(7 downto 0));
+	end component;
+	constant VECTOR_APPLICATION_PERIOD:= 5ns;
+	signal N1: BIT_VECTOR(0 to 3);
+	signal N2: INTEGER;
+	signal PARX: STRING(8 downto 1);
+	begin
+		process
+			variable BUF:LINE;
+			variable N1_VAR: BIT_VECTOR(0 to 3);
+			variable N2_VAR: INTEGER;
+			variable PARX1: STRING(8 downto 1);
+			begin
+				while not ENDFILE(VECTORS) loop
+				READLINE(VECTORS,BUF);
+				if BUF(1) ='#' then
+					next;
+				end if;
+				READ(BUF,N1_VAR);
+				READ(BUF,N2_VAR);
+				READ(BUF,PARX1);
+				N1<=N1_VAR;
+				N2<=N2_VAR;
+				PARX<=TO_STDLOGICVECTOR(PARX1);
+			end loop;
+		end process;
+	end TEST;
