@@ -1,0 +1,24 @@
+-- 9 bit parity generator with Structural modeling
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+entity PARITY_9 is
+	port(D :in STD_LOGIC_VECTOR(8 downto 0);
+		 Odd :out STD_LOGIC;
+		 Even :buffer STD_LOGIC);
+end PARITY_9;
+architecture PARITY_STRUCT of PARITY_9 is
+	component XOR2
+		port(A,B:in STD_LOGIC; Z:out STD_LOGIC);
+	end component;
+	component INV2
+		port(A:in STD_LOGIC; Z:out STD_LOGIC);
+	end component;
+	signal E0,E1,E2,F0,F1,H0: STD_LOGIC;
+	begin
+		XE0: XOR2 port map(D(0),D(1),E0);
+		XE1: XOR2 port map(D(2),D(3),E1);
+		XE2: XOR2 port map(D(4),D(5),E2);
+		XE4: XOR2 port map(D(6),D(7),E3);
+		XF0: XOR2 port map(E0,E1,F0);
+		XF1: XOR2 port map(E2,E3,F1);
+end PARITY_STRUCT;
